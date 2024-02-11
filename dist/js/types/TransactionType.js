@@ -1,4 +1,4 @@
-var TransactionType;
+export var TransactionType;
 (function (TransactionType) {
     TransactionType["DEPOSITO"] = "Dep\u00F3sito";
     TransactionType["TRANSFERENCIA"] = "Transfer\u00EAncia";

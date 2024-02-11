@@ -1,11 +1,13 @@
-function formatCurrency(value: number): string {
+import { FormatDate } from "../types/FormatDate.js";
+
+export function formatCurrency(value: number): string {
   return value.toLocaleString("pt-br", {
     currency: "BRL",
     style: "currency",
   });
 }
 
-function formatDate(
+export function formatDate(
   value: Date,
   format: FormatDate = FormatDate.PADRAO
 ): string {
