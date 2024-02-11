@@ -3,6 +3,18 @@ import { TransactionType } from "./TransactionType.js";
 
 let balance: number = 3000;
 
+const transactions: Transaction[] =
+  JSON.parse(
+    localStorage.getItem("transactions"),
+    (key: string, value: string) => {
+      if (key === "date") {
+        return new Date(value);
+      }
+
+      return value;
+    }
+  ) || [];
+
 function deposit(value: number): void {
   if (value <= 0) {
     throw new Error(
@@ -41,6 +53,9 @@ const Account = {
     } else {
       throw new Error("Operação inválida");
     }
+
+    transactions.push(newTransaction);
+    localStorage.setItem("transactions", JSON.stringify(transactions));
   },
 };
 
