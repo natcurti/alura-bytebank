@@ -1,5 +1,5 @@
-import { TransactionType } from "../types/TransactionType.js";
-import { getBalance, updateBalance } from "./balance.js";
+import Account from "../types/Account.js";
+import BalanceComponent from "./balance.js";
 const form = document.querySelector(".block-nova-transacao form");
 form.addEventListener("submit", function (e) {
     e.preventDefault();
@@ -13,24 +13,12 @@ form.addEventListener("submit", function (e) {
     let transaction = transactionInput.value;
     let value = valueInput.valueAsNumber;
     let date = new Date(dateInput.value);
-    let balance = getBalance();
     const newTransaction = {
         transactionType: transaction,
         value: value,
         date: date,
     };
-    if (transaction === TransactionType.DEPOSITO) {
-        balance += value;
-    }
-    else if (transaction === TransactionType.TRANSFERENCIA ||
-        transaction === TransactionType.PAGAMENTO_BOLETO) {
-        balance -= value;
-    }
-    else {
-        alert("Transação inválida");
-        return;
-    }
-    updateBalance(balance);
-    console.log(newTransaction);
+    Account.registerTransaction(newTransaction);
+    BalanceComponent.update();
     form.reset();
 });

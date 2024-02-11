@@ -1,19 +1,14 @@
-import { formatCurrency, formatDate } from "../utils/formatters.js";
-import { FormatDate } from "../types/FormatDate.js";
-let balance = 3000;
+import { formatCurrency } from "../utils/formatters.js";
+import Account from "../types/Account.js";
 const showBalance = document.querySelector(".valor");
-const showDate = document.querySelector(".block-saldo time");
-if (showDate !== null) {
-    const accessDate = new Date();
-    showDate.textContent = formatDate(accessDate, FormatDate.DIA_SEMANA_DIA_MES_ANO);
-}
-export function getBalance() {
-    return balance;
-}
-updateBalance(balance);
-export function updateBalance(value) {
-    balance = value;
+function renderBalance() {
     if (showBalance !== null) {
-        showBalance.textContent = formatCurrency(balance);
+        showBalance.textContent = formatCurrency(Account.getBalance());
     }
 }
+const BalanceComponent = {
+    update() {
+        renderBalance();
+    },
+};
+export default BalanceComponent;
