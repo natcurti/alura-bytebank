@@ -1,7 +1,3 @@
-let balance = 3000;
-alert("HELLO");
-const showBalance = document.querySelector(".valor");
-showBalance.textContent = balance.toString();
 const form = document.querySelector(".block-nova-transacao form");
 form.addEventListener("submit", function (e) {
     e.preventDefault();
@@ -16,22 +12,25 @@ form.addEventListener("submit", function (e) {
     let value = valueInput.valueAsNumber;
     let date = new Date(dateInput.value);
     const newTransaction = {
-        transaction: transaction,
+        transactionType: transaction,
         value: value,
         date: date,
     };
-    if (transaction === "Depósito") {
+    if (transaction === TransactionType.DEPOSITO) {
         balance += value;
     }
-    else if (transaction === "Transferência" ||
-        transaction === "Pagamento de Boleto") {
+    else if (transaction === TransactionType.TRANSFERENCIA ||
+        transaction === TransactionType.PAGAMENTO_BOLETO) {
         balance -= value;
     }
     else {
         alert("Transação inválida");
         return;
     }
-    showBalance.textContent = balance.toString();
+    showBalance.textContent = balance.toLocaleString("pt-br", {
+        currency: "BRL",
+        style: "currency",
+    });
     console.log(newTransaction);
     form.reset();
 });
