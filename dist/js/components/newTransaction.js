@@ -1,5 +1,6 @@
 import Account from "../types/Account.js";
 import BalanceComponent from "./balance.js";
+import ExtractComponent from "./extract.js";
 const form = document.querySelector(".block-nova-transacao form");
 form.addEventListener("submit", function (e) {
     e.preventDefault();
@@ -13,7 +14,7 @@ form.addEventListener("submit", function (e) {
         const dateInput = document.getElementById("data");
         let transaction = transactionInput.value;
         let value = valueInput.valueAsNumber;
-        let date = new Date(dateInput.value);
+        let date = new Date(dateInput.value + " 00:00:00");
         const newTransaction = {
             transactionType: transaction,
             value: value,
@@ -22,6 +23,7 @@ form.addEventListener("submit", function (e) {
         Account.registerTransaction(newTransaction);
         BalanceComponent.update();
         form.reset();
+        ExtractComponent.update();
     }
     catch (error) {
         alert(error.message);
