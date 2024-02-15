@@ -99,6 +99,16 @@ export class Account {
   }
 }
 
+export class PremiumAccount extends Account {
+  registerTransaction(newTransaction: Transaction): void {
+    if (newTransaction.transactionType === TransactionType.DEPOSITO) {
+      console.log("Você ganhou um bônus de 0.50 centavos!");
+      newTransaction.value += 0.5;
+    }
+    super.registerTransaction(newTransaction);
+  }
+}
+
 const account = new Account("Natalia Julia Curti");
 
 export default account;
