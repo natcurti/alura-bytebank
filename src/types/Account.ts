@@ -5,15 +5,18 @@ import { TransactionType } from "./TransactionType.js";
 
 export class Account {
   protected name: string;
-  protected balance: number = Storage.getData("balance") || 0;
+  protected balance: number = Storage.getData<number>("balance") || 0;
   protected transactions: Transaction[] =
-    Storage.getData("transactions", (key: string, value: string) => {
-      if (key === "date") {
-        return new Date(value);
-      }
+    Storage.getData<Transaction[]>(
+      "transactions",
+      (key: string, value: string) => {
+        if (key === "date") {
+          return new Date(value);
+        }
 
-      return value;
-    }) || [];
+        return value;
+      }
+    ) || [];
 
   constructor(name: string) {
     this.name = name;

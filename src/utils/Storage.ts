@@ -6,10 +6,10 @@ export class Storage {
     localStorage.setItem(key, valueToString);
   }
 
-  static getData(
+  static getData<T>(
     key: string,
     receive?: (this: any, key: string, value: any) => any
-  ) {
+  ): T | null {
     const valueFromLocalStorage = localStorage.getItem(key);
 
     if (valueFromLocalStorage === null) {
@@ -17,9 +17,9 @@ export class Storage {
     }
 
     if (receive) {
-      return JSON.parse(valueFromLocalStorage, receive);
+      return JSON.parse(valueFromLocalStorage, receive) as T;
     }
 
-    return JSON.parse(valueFromLocalStorage);
+    return JSON.parse(valueFromLocalStorage) as T;
   }
 }
