@@ -1,4 +1,5 @@
 import { Storage } from "../utils/Storage.js";
+import { ValidateDebit, ValidateDeposit } from "./Decorators.js";
 import { Transaction } from "./Transaction.js";
 import { TransactionGroup } from "./TransactionGroup.js";
 import { TransactionType } from "./TransactionType.js";
@@ -34,24 +35,14 @@ export class Account {
     return new Date();
   }
 
+  @ValidateDeposit
   private deposit(value: number): void {
-    if (value <= 0) {
-      throw new Error(
-        "O valor a ser depositado na conta deve ser maior que zero."
-      );
-    }
     this.balance += value;
     Storage.saveData("balance", JSON.stringify(this.balance));
   }
 
+  @ValidateDebit
   private withdraw(value: number): void {
-    if (value <= 0) {
-      throw new Error(
-        "O valor a ser debitado da conta deve ser maior que zero."
-      );
-    } else if (value >= this.balance) {
-      throw new Error("Saldo insuficiente.");
-    }
     this.balance -= value;
     Storage.saveData("balance", JSON.stringify(this.balance));
   }
