@@ -1,45 +1,47 @@
-import { Transaction } from "./Transaction";
-import { TransactionGroup } from "./TransactionGroup";
-import { TransactionType } from "./TransactionType";
+import { Storage } from "../utils/Storage.js";
+import { Transaction } from "./Transaction.js";
+import { TransactionGroup } from "./TransactionGroup.js";
+import { TransactionType } from "./TransactionType.js";
 
 export class Account {
-  name: string;
-  balance: number = JSON.parse(localStorage.getItem("balance")) || 0;
-  transactions: Transaction[] =
-    JSON.parse(
-      localStorage.getItem("transactions"),
-      (key: string, value: string) => {
-        if (key === "date") {
-          return new Date(value);
-        }
-
-        return value;
+  protected name: string;
+  protected balance: number = Storage.getData("balance") || 0;
+  protected transactions: Transaction[] =
+    Storage.getData("transactions", (key: string, value: string) => {
+      if (key === "date") {
+        return new Date(value);
       }
-    ) || [];
+
+      return value;
+    }) || [];
 
   constructor(name: string) {
     this.name = name;
   }
 
-  getBalance() {
+  public getOwner() {
+    return this.name;
+  }
+
+  public getBalance() {
     return this.balance;
   }
 
-  getDate(): Date {
+  public getDate(): Date {
     return new Date();
   }
 
-  deposit(value: number): void {
+  private deposit(value: number): void {
     if (value <= 0) {
       throw new Error(
         "O valor a ser depositado na conta deve ser maior que zero."
       );
     }
     this.balance += value;
-    localStorage.setItem("balance", JSON.stringify(this.balance));
+    Storage.saveData("balance", JSON.stringify(this.balance));
   }
 
-  withdraw(value: number): void {
+  private withdraw(value: number): void {
     if (value <= 0) {
       throw new Error(
         "O valor a ser debitado da conta deve ser maior que zero."
@@ -48,10 +50,10 @@ export class Account {
       throw new Error("Saldo insuficiente.");
     }
     this.balance -= value;
-    localStorage.setItem("balance", JSON.stringify(this.balance));
+    Storage.saveData("balance", JSON.stringify(this.balance));
   }
 
-  getTransactionGroup(): TransactionGroup[] {
+  public getTransactionGroup(): TransactionGroup[] {
     const transactionGroups: TransactionGroup[] = [];
     const transactionList: Transaction[] = structuredClone(this.transactions);
     const ordenedTransactions: Transaction[] = transactionList.sort(
@@ -90,7 +92,7 @@ export class Account {
     }
 
     this.transactions.push(newTransaction);
-    localStorage.setItem("transactions", JSON.stringify(this.transactions));
+    Storage.saveData("transactions", JSON.stringify(this.transactions));
   }
 }
 

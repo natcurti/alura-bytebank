@@ -1,38 +1,46 @@
+import { Storage } from "../utils/Storage.js";
 import { TransactionType } from "./TransactionType.js";
-let balance = JSON.parse(localStorage.getItem("balance")) || 0;
-const transactions = JSON.parse(localStorage.getItem("transactions"), (key, value) => {
-    if (key === "date") {
-        return new Date(value);
+export class Account {
+    name;
+    balance = Storage.getData("balance") || 0;
+    transactions = Storage.getData("transactions", (key, value) => {
+        if (key === "date") {
+            return new Date(value);
+        }
+        return value;
+    }) || [];
+    constructor(name) {
+        this.name = name;
     }
-    return value;
-}) || [];
-function deposit(value) {
-    if (value <= 0) {
-        throw new Error("O valor a ser depositado na conta deve ser maior que zero.");
+    getOwner() {
+        return this.name;
     }
-    balance += value;
-    localStorage.setItem("balance", JSON.stringify(balance));
-}
-function withdraw(value) {
-    if (value <= 0) {
-        throw new Error("O valor a ser debitado da conta deve ser maior que zero.");
-    }
-    else if (value >= balance) {
-        throw new Error("Saldo insuficiente.");
-    }
-    balance -= value;
-    localStorage.setItem("balance", JSON.stringify(balance));
-}
-const Account = {
     getBalance() {
-        return balance;
-    },
+        return this.balance;
+    }
     getDate() {
         return new Date();
-    },
+    }
+    deposit(value) {
+        if (value <= 0) {
+            throw new Error("O valor a ser depositado na conta deve ser maior que zero.");
+        }
+        this.balance += value;
+        Storage.saveData("balance", JSON.stringify(this.balance));
+    }
+    withdraw(value) {
+        if (value <= 0) {
+            throw new Error("O valor a ser debitado da conta deve ser maior que zero.");
+        }
+        else if (value >= this.balance) {
+            throw new Error("Saldo insuficiente.");
+        }
+        this.balance -= value;
+        Storage.saveData("balance", JSON.stringify(this.balance));
+    }
     getTransactionGroup() {
         const transactionGroups = [];
-        const transactionList = structuredClone(transactions);
+        const transactionList = structuredClone(this.transactions);
         const ordenedTransactions = transactionList.sort((t1, t2) => t2.date.getTime() - t1.date.getTime());
         let labelActualGroup = "";
         for (let transaction of ordenedTransactions) {
@@ -49,21 +57,22 @@ const Account = {
             transactionGroups.at(-1).transactions.push(transaction);
         }
         return transactionGroups;
-    },
+    }
     registerTransaction(newTransaction) {
         if (newTransaction.transactionType === TransactionType.DEPOSITO) {
-            deposit(newTransaction.value);
+            this.deposit(newTransaction.value);
         }
         else if (newTransaction.transactionType === TransactionType.TRANSFERENCIA ||
             newTransaction.transactionType === TransactionType.PAGAMENTO_BOLETO) {
-            withdraw(newTransaction.value);
+            this.withdraw(newTransaction.value);
             newTransaction.value *= -1;
         }
         else {
             throw new Error("Operação inválida");
         }
-        transactions.push(newTransaction);
-        localStorage.setItem("transactions", JSON.stringify(transactions));
-    },
-};
-export default Account;
+        this.transactions.push(newTransaction);
+        Storage.saveData("transactions", JSON.stringify(this.transactions));
+    }
+}
+const account = new Account("Natalia Julia Curti");
+export default account;
