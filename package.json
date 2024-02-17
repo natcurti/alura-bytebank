@@ -1,0 +1,18 @@
+{
+  "name": "bytebank",
+  "version": "1.0.0",
+  "description": "O ByteBank é um projeto de simulação de um banco digital. Ao acessar o projeto, você poderá ver o saldo de uma conta, realizar algumas transações como depósito, transferência e pagamento de boletos, e consultar o extrato.",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/natcurti/alura-bytebank"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "typescript": "^5.3.3"
+  }
+}
