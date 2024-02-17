@@ -11,6 +11,14 @@ Para construção desse projeto foram utilizados:
 - JavaScript
 - TypeScript
 
+## 🚀 Instalação
+
+Após clonar o projeto, acesse o diretório e digite o comando abaixo para instalar as dependências necessárias:
+
+```
+  npm install
+```
+
 ## 📕 Aprendizados
 
 Neste projeto construímos uma aplicação com TypeScript utilizando o paradigma de programação Orientado à Objetos. Trabalhamos com modificadores de acesso, herança e polimorfismo.
