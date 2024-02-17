@@ -38,7 +38,7 @@ export class Account {
   @ValidateDeposit
   private deposit(value: number): void {
     this.balance += value;
-    Storage.saveData("balance", JSON.stringify(this.balance));
+    Storage.saveData("balance", this.balance);
   }
 
   @ValidateDebit
@@ -50,6 +50,8 @@ export class Account {
   public getTransactionGroup(): TransactionGroup[] {
     const transactionGroups: TransactionGroup[] = [];
     const transactionList: Transaction[] = structuredClone(this.transactions);
+    const local = localStorage.getItem("transactions");
+    console.log(local);
     const ordenedTransactions: Transaction[] = transactionList.sort(
       (t1, t2) => t2.date.getTime() - t1.date.getTime()
     );
@@ -86,7 +88,7 @@ export class Account {
     }
 
     this.transactions.push(newTransaction);
-    Storage.saveData("transactions", JSON.stringify(this.transactions));
+    Storage.saveData("transactions", this.transactions);
   }
 }
 

@@ -30,7 +30,7 @@ export class Account {
     }
     deposit(value) {
         this.balance += value;
-        Storage.saveData("balance", JSON.stringify(this.balance));
+        Storage.saveData("balance", this.balance);
     }
     withdraw(value) {
         this.balance -= value;
@@ -39,6 +39,8 @@ export class Account {
     getTransactionGroup() {
         const transactionGroups = [];
         const transactionList = structuredClone(this.transactions);
+        const local = localStorage.getItem("transactions");
+        console.log(local);
         const ordenedTransactions = transactionList.sort((t1, t2) => t2.date.getTime() - t1.date.getTime());
         let labelActualGroup = "";
         for (let transaction of ordenedTransactions) {
@@ -69,7 +71,7 @@ export class Account {
             throw new Error("Operação inválida");
         }
         this.transactions.push(newTransaction);
-        Storage.saveData("transactions", JSON.stringify(this.transactions));
+        Storage.saveData("transactions", this.transactions);
     }
 }
 __decorate([
